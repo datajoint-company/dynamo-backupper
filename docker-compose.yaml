@@ -1,0 +1,24 @@
+# This docker-compose file is strickly for development only. Actual deployment target will be K8
+version: "2.4"
+services:
+  dynamo-backupper:
+    environment: 
+      - AWS_ACCESS_KEY_ID
+      - AWS_SECRET_ACCESS_KEY
+      - TYPE
+      - PROJECT_ID
+      - PRIVATE_KEY_ID
+      - PRIVATE_KEY
+      - CLIENT_EMAIL
+      - CLIENT_ID
+      - AUTH_URI
+      - TOKEN_URI
+      - AUTH_PROVIDER_x509_CERT_URL
+      - CLIENT_x509_CERT_URL
+      - REGION
+      - TABLE_NAME
+      - FOLDER_NAME
+    build: .
+    volumes:
+      - ./:/src
+    command: bash -c "python3 ./scripts/main.py"

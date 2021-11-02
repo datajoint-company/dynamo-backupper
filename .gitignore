@@ -1,5 +1,5 @@
 *.ipynb_checkpoints
 *_pycache__
-service_account_file.json
-temp_dump.csv
 .vscode
+.env
+.pytest_cache

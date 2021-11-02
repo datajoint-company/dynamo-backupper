@@ -1,8 +1,9 @@
 import os
 import json
+import io
 from google.oauth2 import service_account
 from googleapiclient.discovery import build
-from apiclient.http import MediaFileUpload
+from apiclient.http import MediaIoBaseUpload
 
 SCOPES = ['https://www.googleapis.com/auth/drive']
 
@@ -27,7 +28,7 @@ class GoogleAPIAdapter:
 
     def find_folder_id(self, folder_name):
         # Query files
-        files = self.google_drive_api.files().list(pageSize=10, fields="nextPageToken, files(id, name)").execute()
+        files = self.google_drive_api.files().list(pageSize=100, fields="nextPageToken, files(id, name)").execute()
         folder_id = folder_name
         for file in files['files']:
             if file['name'] == folder_name:
@@ -36,7 +37,7 @@ class GoogleAPIAdapter:
         # Raise exception if folder was not found      
         raise Exception('Could not find ' + folder_name)
 
-    def upload_csv_under_folder(self, csv_upload_name, csv_filename_on_disk, folder_id):
+    def upload_csv_under_folder(self, csv_upload_name, file_in_memory, folder_id):
         file_metadata = dict(name=csv_upload_name, parents=[folder_id])
-        media_body = MediaFileUpload(csv_filename_on_disk, mimetype='text/csv')
+        media_body = MediaIoBaseUpload(io.BytesIO(file_in_memory.getvalue().encode('utf-8')), mimetype='text/csv')
         self.google_drive_api.files().create(body=file_metadata, media_body=media_body).execute()

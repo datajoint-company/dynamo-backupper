@@ -94,5 +94,8 @@ spec:
                 secretKeyRef:
                   name: dynamo-backupper-params
                   key: FOLDER_NAME
+            # command: ["/bin/bash"]
+            # args: ["-c", "python3 ./scripts/main.py $REGION $TABLE_NAME $FOLDER_NAME"]
             command: ["/bin/bash"]
-            args: ["-c", "python3 ./scripts/main.py $REGION $TABLE_NAME $FOLDER_NAME"]
+            args: ["-c", "dynamo_backupper --save_to google --region $REGION --table $TABLE_NAME --gdfolder $FOLDER_NAME"]
+            # args: ["-c", "dynamo_backupper --save_to s3 --region $REGION --table $TABLE_NAME --bucket_name $BUCKET --key_name $KEY"]
